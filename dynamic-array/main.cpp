@@ -1,9 +1,12 @@
 #include <iostream>
 #include "dynamic-array.h"
+#include <vector>
+
+
 
 int main()
 {
-    DynamicArray<int> da{};
+    DynamicArray<int> da;
 
 
     for (int i{}; i < 17; ++i){
