@@ -13,16 +13,55 @@ public:
     DynamicArray(int cap) : capacity(cap), data(new T[cap]) {}
 
     ~DynamicArray() { delete[] data; }
+    
+    T& operator[](int index)
+    {
+        return data[index];
+    }
 
     void reserve(const int& cap) {}
 
     void resize(const int& sz) {}
 
-    void push_back(const T& item) {}
+    // TODO: handle initial capacity empty 
+    void push_back(const T& item) 
+    {
+        // == probably fine
+        if (size >= capacity) {
+            T *newData = new T[2 * capacity];
 
-    void pop_back() {}
+            for(int i{}; i < capacity; ++i){
+                newData[i] = data[i];
+            }
 
-    void back() {}
+            capacity *= 2;
+            delete[] data;
+            data = newData;
+        }
+        // post increment because
+        // we want to insert at size
+        // and then increment
+        data[size++] = item;
+    }
+
+    // TODO: should destroy the elements not just decriment
+    void pop_back() 
+    {
+        if ( size <= 0 ){
+            // maybe make function bool
+            return;
+        }
+
+        --size;
+    }
+
+    //TODO: UB when array is empty
+    T back() const { return data[size - 1]; }
+
+    int getSize() const { return size; }
+    int getCapacity() const { return capacity; }
+
+
 
     // not sure how to do this
     void for_each() {}
