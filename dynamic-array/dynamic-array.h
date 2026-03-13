@@ -14,6 +14,8 @@ public:
 
     ~DynamicArray() 
     { 
+        //operator delete does not automatically call the destructors for the objects
+        //need to call them manually to prevent memory leaks
         for (size_t i {}; i < size_; ++i){
             data[i].~T();
         }
