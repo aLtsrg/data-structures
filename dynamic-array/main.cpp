@@ -11,13 +11,17 @@ int main()
 
     for (int i{}; i < 17; ++i){
         da.push_back(i);
-        std::cout << "---------------------------------------\n";
-        std::cout << "SIZE: " << da.getSize() << '\n';
-        std::cout << "CAPACITY: " << da.getCapacity() << '\n';
     }
 
-    std::cout << da.back() << '\n';
+    da.reserve(1000000);
 
-    std::cout << "Hello, World!\n";
+    for (size_t i {}; i < da.size(); ++i){
+        std::cout << da[i] << '\n';
+    }
+
+    std::cout << da.capacity() << '\n';
+
+
+
     return 0;
 }
