@@ -3,6 +3,9 @@
 
 #include <cstddef>
 
+// TODO: add copy constructor and copy assignment
+// right now if you use that, it may cause a double delete which is UB
+
 template <typename T>
 class DynamicArray
 {
@@ -29,6 +32,27 @@ public:
         return data[index];
     }
 
+    void push_back(const T& item) 
+    {
+        if (size_ == capacity_) {
+            reAllocate();    
+        }
+        // post increment because
+        // we want to insert at size_
+        // and then increment
+        new (data + size_) T(item);
+        ++size_;
+    }
+
+    void pop_back() 
+    {
+        // call destructor for the back object
+        // only neccsary because of template type
+        // if there is no destructor eg. T = int, this will be a no-op
+        data[size_ - 1].~T();
+        --size_;
+    }
+    
     void reserve(const size_t& capacity) 
     {
         //cannot shrink
@@ -56,32 +80,12 @@ public:
                 
                 //placement new, see: https://en.cppreference.com/w/cpp/language/new.html
                 //default allocates T at specified memory location
-                new (data + i) T;
+                //changed to value initialization 
+                new (data + i) T{};
             }
         }
 
         size_ = size;
-    }
-
-    void push_back(const T& item) 
-    {
-        if (size_ == capacity_) {
-            reAllocate();    
-        }
-        // post increment because
-        // we want to insert at size_
-        // and then increment
-        new (data + size_) T(item);
-        ++size_;
-    }
-
-    void pop_back() 
-    {
-        // call destructor for the back object
-        // only neccsary because of template type
-        // if there is no destructor eg. T = int, this will be a no-op
-        data[size_ - 1].~T();
-        --size_;
     }
 
     // UB if call back when sz == 0
